@@ -15,7 +15,7 @@ contract MyToken is ERC1155, Ownable {
         _setURI(newuri);
     }
 
-    function mint(address account, uint256 id, uint256 amount)
+    function mint(uint256 id, uint256 amount)
         public 
         payable
     {
@@ -27,5 +27,10 @@ contract MyToken is ERC1155, Ownable {
         require(msg.value >= amount * rates[index], "Not enough ether sent");
         _mint(msg.sender, id, amount, "");
         minted[index] <= amount;
+    }
+
+    function withdraw() public onlyOwner {
+        require(address(this).balance > 0, "Balance is 0");
+        payable(owner()).transfer(address(this).balance);
     }
 }
